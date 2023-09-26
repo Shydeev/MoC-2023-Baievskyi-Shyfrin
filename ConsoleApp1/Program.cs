@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConsoleApp1.Functions;
+using ConsoleApp1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +12,10 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            var decision = DeterministicDecisionFunction.MakeDecision();
+
+            Console.WriteLine(new Matrix(decision));
+
             Console.ReadLine();
         }
     }

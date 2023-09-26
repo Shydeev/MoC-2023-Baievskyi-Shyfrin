@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Variant.cs" />
+    <Compile Include="Functions\DeterministicDecisionFunction.cs" />
+    <Compile Include="Functions\StochasticDecisionFunction.cs" />
     <Compile Include="Models\Matrix.cs" />
     <Compile Include="Models\SquareMatrix.cs" />
     <Compile Include="Program.cs" />

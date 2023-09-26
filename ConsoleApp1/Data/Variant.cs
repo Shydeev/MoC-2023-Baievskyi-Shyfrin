@@ -9,13 +9,16 @@ namespace ConsoleApp1.Data
 {
     public static class Variant
     {
-        public static Matrix prob_02 { get; set; } = new Matrix(new double[,] 
+        public static double[,] prob_02_M = new double[,] 
         {
-            { 0.14, 0.14, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 },
-            { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 }
-        });
-
-        public static Matrix table_02 { get; set; } = new Matrix(new double[,]
+            { 0.14, 0.14, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 } 
+        };
+   
+        public static double[,] prob_02_K = new double[,]
+        {
+            { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 } 
+        };
+        public static double[,] table_02 {get;set;} = new double[,]
         {
             { 19, 13, 3, 16, 5, 10, 8, 1, 12, 14, 7, 2, 17, 11, 15, 18, 6, 0, 4, 9 },
             { 15, 13, 17, 5, 2, 9, 7, 11, 3, 18, 0, 12, 8, 10, 6, 19, 1, 16, 4, 14 },
@@ -37,15 +40,22 @@ namespace ConsoleApp1.Data
             { 17, 18, 7, 10, 14, 12, 3, 9, 15, 1, 19, 8, 2, 4, 11, 6, 13, 5, 16, 0},
             { 8, 2, 6, 4, 0, 7, 17, 19, 10, 14, 16, 9, 13, 3, 1, 12, 11, 18, 5, 15 },
             { 17, 15, 8, 11, 2, 1, 10, 4, 12, 5, 18, 6, 16, 3, 7, 19, 9, 13, 14, 0}
-        });
+        };
 
         public static void WriteData()
         {
-            Console.WriteLine("\nprop_02.csv:\n\n");
-            Console.WriteLine(Data.Variant.prob_02);
+            Matrix prob_02_M_matrix = new Matrix(prob_02_M);
+            Matrix prob_02_K_matrix = new Matrix(prob_02_K);
+            Matrix table_02_matrix = new Matrix(table_02);
+
+            Console.WriteLine("\nprop_02.csv for M:\n\n");
+            Console.WriteLine(prob_02_M_matrix);
+
+            Console.WriteLine("\nprop_02.csv for K:\n\n");
+            Console.WriteLine(prob_02_K_matrix);
 
             Console.WriteLine("\n\ntable_02.csv:\n\n");
-            Console.WriteLine(Data.Variant.table_02);
+            Console.WriteLine(table_02_matrix);
         }
     }
 }
