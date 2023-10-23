@@ -1,40 +1,47 @@
-﻿using ConsoleApp1.Models;
-using ConsoleApp1.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConsoleApp1.Data;
 
 namespace ConsoleApp1.Functions
 {
     public static class DeterministicDecisionFunction
     {
-        public static double[,] MakeDecision()
+        public static int[] MakeDecision()
         {
-            var result = new double[20,20];
+            var result = new int[20];
 
-            // M_{i}
-            for (int i = 0; i < 20; i++)
+            var conditional_probabilities = Variant.GetConditionalProbabilities();
+
+            var max = new decimal[20] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            for (int column = 0; column < 20; column++)
             {
-                // C_{j} = j
-                for (int j = 0; j < 20; j++)
+                for (int row = 0; row < 20; row++)
                 {
-                    // Key - k
-                    for (int k = 0; k < 20; k++)
+                    if (conditional_probabilities[row, column] > max[column])
                     {
-                        if (Variant.table_02[k, i] == j)
-                        {
-                            // Console.WriteLine("i = {0}\nj = {1}\nk = {2}\nP(M_{0}, C_{1}) = {3}", i,j,k, Variant.table_02[k, i]);
-                            // Console.WriteLine("Result += {0} * {1}", Variant.prob_02_M[0, i], Variant.prob_02_K[0, k]);
-                            result[j, i] += Variant.prob_02_M[0, i] * Variant.prob_02_K[0, k];
-                        }
+                        max[column] = conditional_probabilities[row, column];
+                        result[column] = row;
                     }
-                    //Console.WriteLine(result);
                 }
             }
 
-            return result;  
+            return result;
+        }
+
+        public static decimal GetLossFunctionResult(int[] decision)
+        {
+            var result = 0m;
+
+            var P_M_C = Variant.GetCiphertextMessagesProbabilities();
+
+            for (int messageId = 0; messageId < 20; messageId++)
+            {
+                for (int cipherId = 0; cipherId < 20; cipherId++)
+                {
+                    result += P_M_C[messageId, cipherId] * (decision[cipherId] == messageId ? 0 : 1);
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using ConsoleApp1.Functions;
-using ConsoleApp1.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
@@ -12,9 +7,14 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var decision = DeterministicDecisionFunction.MakeDecision();
+            var deterministicDecision = DeterministicDecisionFunction.MakeDecision();
+            var deterministicLosses = DeterministicDecisionFunction.GetLossFunctionResult(deterministicDecision);
+            Console.WriteLine("Deterministic Losses Function: {0}", deterministicLosses);
 
-            Console.WriteLine(new Matrix(decision));
+
+            var stochasticDecision = StochasticDecisionFunction.MakeDecision();
+            var stochasticLosses = StochasticDecisionFunction.GetLossFunctionResult(stochasticDecision);
+            Console.WriteLine("Stochastic Losses Function: {0}", stochasticLosses);
 
             Console.ReadLine();
         }

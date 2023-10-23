@@ -1,7 +1,10 @@
 ﻿using ConsoleApp1.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,16 +12,16 @@ namespace ConsoleApp1.Data
 {
     public static class Variant
     {
-        public static double[,] prob_02_M = new double[,] 
+        public static double[,] prob_02_M = new double[,]
         {
-            { 0.14, 0.14, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 } 
+            { 0.14, 0.14, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04 }
         };
-   
+
         public static double[,] prob_02_K = new double[,]
         {
-            { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 } 
+            { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 }
         };
-        public static double[,] table_02 {get;set;} = new double[,]
+        public static double[,] table_02 { get; set; } = new double[,]
         {
             { 19, 13, 3, 16, 5, 10, 8, 1, 12, 14, 7, 2, 17, 11, 15, 18, 6, 0, 4, 9 },
             { 15, 13, 17, 5, 2, 9, 7, 11, 3, 18, 0, 12, 8, 10, 6, 19, 1, 16, 4, 14 },
@@ -57,5 +60,96 @@ namespace ConsoleApp1.Data
             Console.WriteLine("\n\ntable_02.csv:\n\n");
             Console.WriteLine(table_02_matrix);
         }
+
+        public static Pair[,] GetPairs()
+        {
+            var result = new Pair[20, 20];
+
+            for (int row = 0; row < 20; row++)
+            {
+                for (int column = 0; column < 20; column++)
+                {
+                    for (int k = 0; k < 20; k++)
+                    {
+                        if (k == ((int)table_02[row, column]))
+                        {
+                            result[row, k] = new Pair
+                            {
+                                KeyId = row,
+                                MessageId = column
+                            };
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static decimal[,] GetCiphertextsProbabilities()
+        {
+            var pairs = GetPairs();
+            var result = new decimal[20, 1];
+
+            for (int column = 0; column < 20; column++)
+            {
+                for (int row = 0; row < 20; row++)
+                {
+                    result[column, 0] += (decimal)prob_02_M[0, pairs[row, column].MessageId] * (decimal)prob_02_K[0, pairs[row, column].KeyId];
+                }
+            }
+
+            return result;
+        }
+
+        public static decimal[,] GetCiphertextMessagesProbabilities()
+        {
+            var pairs = GetPairs();
+            var result = new decimal[20, 20];
+
+            for (int column = 0; column < 20; column++)
+            {
+                for (int messageId = 0; messageId < 20; messageId++)
+                {
+                    var keys = new List<int>();
+
+                    for (int row = 0; row < 20; row++)
+                    {
+                        if (pairs[row, column].MessageId == messageId)
+                        {
+                            keys.Add(pairs[row, column].KeyId);
+                        }
+                    }
+
+                    var keysSum = keys.Select(indexKey => (decimal)prob_02_K[0, indexKey]).ToList().Sum();
+                    decimal product = (decimal)prob_02_M[0, messageId] * keysSum;
+                    result[messageId, column] = product;
+                }
+            }
+
+            return result;
+        }
+
+        public static decimal[,] GetConditionalProbabilities()
+        {
+            var P_C = GetCiphertextsProbabilities();
+            var P_M_C = GetCiphertextMessagesProbabilities();
+
+            var result = new decimal[20, 20];
+
+            for (int messageId = 0; messageId < 20; messageId++)
+            {
+                for (int cipherId = 0; cipherId < 20; cipherId++)
+                {
+                    result[messageId, cipherId] = P_M_C[messageId, cipherId] / P_C[cipherId,0];
+                }
+            }
+
+            return result;
+        }
+
+        
+
     }
 }
