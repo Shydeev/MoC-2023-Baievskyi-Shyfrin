@@ -1,0 +1,64 @@
+\documentclass{bachelor_report}
+
+% Додаткові пакети вносіть у цей файл
+\input{01_packages}
+\addbibresource{../BIB/Resources.bib}
+
+% Додаткові визначення та перевизначення команд вносіть у цей файл
+\input{02_redefinitions}
+
+% Відомості про автора роботи
+\input{03_data}
+
+% Встановлення числового представлення розділів
+\renewcommand{\thesection}{\arabic{section}}
+
+% Встановлення числового представлення підрозділів
+\renewcommand{\thesubsection}{\thesection. \arabic{subsection}}
+
+% Налаштування розділів
+\titleformat{\section}
+{\normalfont\LARGE\bfseries}{\thesection}{1em}{}
+
+% Налаштування підрозділів
+\titleformat{\subsection}
+{\normalfont\Large\bfseries}{\thesubsection}{1em}{}
+
+% Починаємо верстку документа
+\begin{document}
+
+\setfontsize{14}
+
+% Створюємо титульну сторінку
+\input{../CHAPTERS/title}
+
+%% Створюємо зміст    % -- розкоментуйте, якщо зміст вам потрібен
+%\pagenumbering{gobble}
+\tableofcontents
+\cleardoublepage
+%\pagenumbering{arabic}
+
+\setcounter{page}{2}    %!!! -- продумати, як автоматизувати номер сторінки
+
+%% Якщо ви використовуєте зміст, то прослідкуйте, щоб номер сторінки 
+%% співпадав із справжнім!
+
+% Створюємо вступ
+%\intro
+\input{../CHAPTERS/chapter1}
+
+% Додаємо глави
+% Якщо ваша робота містить менше або більше глав - модифікуйте наступні 
+% рядки відповідним чином
+\input{../CHAPTERS/chapter2}
+
+\input{../CHAPTERS/chapter3}
+
+\input{../CHAPTERS/conclusions}
+
+% Створюємо висновки
+% \conclusions
+% \input{../CHAPTERS/w1_conclusions}
+
+% Нарешті
+\end{document}
